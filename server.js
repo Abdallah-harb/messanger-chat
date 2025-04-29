@@ -3,6 +3,7 @@ require('dotenv').config()
  const corsMiddleware = require('./middleware/corsMiddleware');
  const connectDB = require('./config/connection');
  const app = express();
+const multer  = require('multer')
  const port = process.env.APP_PORT;
  const apiRoute = require('./route/apiRoute');
  const path = require('path');
@@ -11,7 +12,7 @@ require('dotenv').config()
 //
  app.use(express.json());
  app.use(express.urlencoded({ extended: true }));
-//
+app.use(multer().none());
  corsMiddleware(app);
  app.use('/storage', express.static(path.join(__dirname,'storage')));
  app.use('/api',apiRoute);

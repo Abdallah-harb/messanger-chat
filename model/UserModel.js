@@ -5,12 +5,12 @@ const userSchema = new mongoose.Schema(
     {
         name:{type:String, required:true},
         email:{type:String,unique:true,lowercase:true,trim:true,required:true},
-        email_verified_at:{type:Date},
-        email_code_verified:{type:Date},
+        email_verified_at:{type:Date,default:null},
+        email_code_verified:{type:String,default:null},
         password:{type:String,required:true},
-        phone:{type:String},
-        phone_verified_at:{type:Date},
-        avatar:{type:String}
+        phone:{type:String,default:null},
+        phone_verified_at:{type:Date,default:null},
+        avatar:{type:String,default:null}
     },
     {
         timestamps:true,versionKey:false
@@ -18,12 +18,12 @@ const userSchema = new mongoose.Schema(
 );
 
 //generate hash password
-userSchema.methods.generateHash  = function (password) {
+userSchema.statics.generateHash  = function (password) {
     return bcrypt.hash(password,10);
 }
 
 //checking if password is valid
-userSchema.methods.validPassword = function (password){
+userSchema.statics.validPassword = function (password){
     return bcrypt.compare(password,this.password);
 }
 
@@ -35,6 +35,8 @@ userSchema.methods.sentCodeVerification =async function (){
     await AuthServices.sendMail({code:code,email:this.email});
 
 }
+
+
 
 // Automatically remove the password when converting to JSON
 userSchema.methods.toJSON = function () {

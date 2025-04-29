@@ -1,6 +1,5 @@
 const {body} = require('express-validator');
 const User = require('../../model/UserModel');
-const {error} = require("winston");
 const RegisterValidate = ()=>[
 
     body('name')
@@ -12,10 +11,10 @@ const RegisterValidate = ()=>[
         .isEmail().withMessage('email not valid ')
         .custom(async value=>{
             const checkEmailExists = await User.findOne({email:value});
-            if (checkEmailExists)
+            if (checkEmailExists){
                 throw new Error('email already be taken');
-            else
-                return true
+            }
+
         }),
 
     body('password')
