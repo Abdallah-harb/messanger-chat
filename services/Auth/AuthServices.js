@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const User = require('../../model/UserModel');
+const User = require('../../model/UserModel')
 
 const sendMail = async (data)=>{
     const transporter = nodemailer.createTransport({
