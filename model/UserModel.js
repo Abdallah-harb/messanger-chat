@@ -22,8 +22,13 @@ userSchema.statics.generateHash  = function (password) {
     return bcrypt.hash(password,10);
 }
 
+//generate hash password
+userSchema.methods.generateHash  = function (password) {
+    return bcrypt.hash(password,10);
+}
+
 //checking if password is valid
-userSchema.statics.validPassword = function (password){
+userSchema.methods.validPassword = function (password){
     return bcrypt.compare(password,this.password);
 }
 

@@ -16,18 +16,11 @@ const register = async (req,res)=> {
             sent = false;
             Logger.handleError('register-sent-code', e);
         }
-        return res.status(200).json({
-            status: 200,
-            message: " Registered Successfully .!",
-            sent: sent
-        })
+        return jsonResponse(res,{"sent":sent})
 
     } catch (e) {
         Logger.handleError('register', e);
-        return res.status(e.status).json({
-            status: e.status,
-            message: e.message
-        });
+        return  errorResponse(res,e.message,e.error)
     }
 }
 
@@ -127,7 +120,7 @@ const login = async (req,res)=>{
             token:token
         });
     }catch (e) {
-        Logger.handleError('register-sent-code', e);
+        Logger.handleError('login', e);
         return res.status(500).json({
             status: 500,
             message: e.message,
