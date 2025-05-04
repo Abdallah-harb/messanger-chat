@@ -11,7 +11,10 @@ const UserController = require('../controller/Auth/UserController');
 const {LoginValidate} = require('../validator/Auth/LoginValidate')
 const {ChangePasswordValidate} = require('../validator/Profile/ChangePasswordValidate');
 const {UpdateProfileValidate} = require('../validator/Profile/UpdateProfileValidate');
+const ChatController = require('../controller/Chat/ChatController');
+const {SendMessageValidate}= require('../validator/Chat/SendMessageValidate');
 
+// public routes
 Route.post('/register',RegisterValidate(),handelErrorValidate,AuthController.register);
 Route.post('/verify-code',VerifyCodeValidate(),handelErrorValidate,AuthController.verifyCode);
 Route.post('/resend-code',ResendCodeValidate(),handelErrorValidate,AuthController.resendCode);
@@ -24,5 +27,13 @@ Route.post('/update-profile',checkAuth,upload.single('avatar'),
                                   UpdateProfileValidate(),
                                     handelErrorValidate
                                 ,UserController.updateProfile);
+
+//chat routes
+Route.get('/conversations',checkAuth,ChatController.conversations);
+Route.post('/start-conversation',checkAuth,SendMessageValidate,handelErrorValidate,ChatController.conversations);
+Route.post('/send-message',checkAuth,ChatController.sendMessage);
+Route.get('/messages',checkAuth,ChatController.messages)
+
+
 
 module.exports = Route;

@@ -129,5 +129,9 @@ const login = async (req,res)=>{
 
 }
 
-module.exports={register,verifyCode,resendCode,login}
+const logout = (req,res)=>{
+
+}
+
+module.exports={register,verifyCode,resendCode,login,logout}
 

@@ -1,12 +1,22 @@
 require('dotenv').config()
  const express = require('express')
- const corsMiddleware = require('./middleware/corsMiddleware');
- const connectDB = require('./config/connection');
- const app = express();
-
+const { createServer } = require('node:http');
+const { Server } = require('socket.io');
+const corsMiddleware = require('./middleware/corsMiddleware');
+const connectDB = require('./config/connection');
+const app = express();
+const server = createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: '*'
+    }
+});
  const port = process.env.APP_PORT;
  const apiRoute = require('./route/apiRoute');
  const path = require('path');
+app.set('io', io); // Make io accessible globally
+// to avoid circular dependency
+require('./socket')(io);
 require('./Helpier/response');
 
  connectDB;
@@ -24,6 +34,6 @@ app.use((req, res, next) => {
     });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
