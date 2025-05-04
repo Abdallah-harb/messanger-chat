@@ -12,7 +12,9 @@ const {LoginValidate} = require('../validator/Auth/LoginValidate')
 const {ChangePasswordValidate} = require('../validator/Profile/ChangePasswordValidate');
 const {UpdateProfileValidate} = require('../validator/Profile/UpdateProfileValidate');
 const ChatController = require('../controller/Chat/ChatController');
-const {SendMessageValidate}= require('../validator/Chat/SendMessageValidate');
+const {StartConversationValidate}= require('../validator/Chat/StartConversationValidate');
+const {SendMessageValidate} = require('../validator/Chat/SendMessageValidate');
+
 
 // public routes
 Route.post('/register',RegisterValidate(),handelErrorValidate,AuthController.register);
@@ -30,9 +32,10 @@ Route.post('/update-profile',checkAuth,upload.single('avatar'),
 
 //chat routes
 Route.get('/conversations',checkAuth,ChatController.conversations);
-Route.post('/start-conversation',checkAuth,SendMessageValidate,handelErrorValidate,ChatController.conversations);
-Route.post('/send-message',checkAuth,ChatController.sendMessage);
-Route.get('/messages',checkAuth,ChatController.messages)
+Route.post('/start-conversation',checkAuth,StartConversationValidate,handelErrorValidate,ChatController.conversations);
+Route.post('/send-message',checkAuth,SendMessageValidate(),handelErrorValidate,ChatController.sendMessage);
+Route.get('/messages/:conversation_id',checkAuth,ChatController.messages);
+Route.put('/message-seen/:id',checkAuth,ChatController.messageSeen);
 
 
 
