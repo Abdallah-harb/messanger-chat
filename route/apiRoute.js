@@ -32,8 +32,14 @@ Route.post('/update-profile',checkAuth,upload.single('avatar'),
 
 //chat routes
 Route.get('/conversations',checkAuth,ChatController.conversations);
-Route.post('/start-conversation',checkAuth,StartConversationValidate,handelErrorValidate,ChatController.conversations);
-Route.post('/send-message',checkAuth,SendMessageValidate(),handelErrorValidate,ChatController.sendMessage);
+Route.post('/start-conversation',checkAuth,upload.single('avatar'),
+                                    StartConversationValidate(),handelErrorValidate,
+                                    ChatController.startConversation);
+
+Route.post('/send-message',checkAuth,upload.single('avatar'),
+                                SendMessageValidate(),handelErrorValidate,
+                                ChatController.sendMessage);
+
 Route.get('/messages/:conversation_id',checkAuth,ChatController.messages);
 Route.put('/message-seen/:id',checkAuth,ChatController.messageSeen);
 

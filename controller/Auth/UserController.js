@@ -7,7 +7,7 @@ const {getRelativeUploadPath,deleteImageIfExists} = require('../../services/File
 const user = async (req, res) => {
     try{
         const user = await User.findById(req.user.id);
-        return jsonResponse(res,{'user' : userResource(user)});
+        return jsonResponse(res,{'user' : await userResource(user)});
     }catch (e) {
         return  errorResponse(res,e.message.e.errors)
     }
@@ -51,7 +51,7 @@ const updateProfile = async (req,res)=>{
         user.phone = phone;
         await user.save();
 
-        return jsonResponse(res,{"user":userResource(user)});
+        return jsonResponse(res,{"user":await userResource(user)});
     }catch (e) {
         Logger.handleError('update-profile',e)
         return errorResponse(res,e.message,e.error,500);

@@ -1,16 +1,17 @@
+const onlineUsers = new Map();
 module.exports = function(io) {
     io.on('connection', (socket) => {
         const userId = socket.handshake.query.user_id;
         if (userId) {
             socket.join(userId); // Join personal room
+            onlineUsers.set(userId, socket.id);
             console.log(` User ${userId} connected with socket ID: ${socket.id}`);
+            socket.broadcast.emit('user-online', { user_id: userId });
         }
 
-        // Handle chat message broadcast to specific receiver
-        socket.on('chat-message', (data) => {
-            const { receiver_id, message } = data;
-            io.to(receiver_id.toString()).emit('chat-message', { message, sender_id: userId });
-            console.log(`Message sent to ${receiver_id}`);
+        // get online users
+        socket.on('get-online-users', () => {
+            socket.emit('online-users', Array.from(onlineUsers.keys()));
         });
 
         // Typing status (for a specific receiver)
@@ -25,9 +26,12 @@ module.exports = function(io) {
         });
 
         socket.on('disconnect', () => {
+            onlineUsers.delete(userId);
             console.log(`User ${userId} disconnected`);
+            socket.broadcast.emit('user-offline', { user_id: userId });
         });
     });
+
 };
 
-// these file have all event as front can use it to emit real-time data without saving it in database
+

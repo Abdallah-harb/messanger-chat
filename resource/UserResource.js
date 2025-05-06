@@ -1,6 +1,7 @@
 const dayjs = require('dayjs');
- function userResource(user)
+async function userResource(user)
 {
+    if (!user) return null;
     const avatarPath = user.avatar ? `${process.env.APP_URL}/${user.avatar}` : null;
     return{
         id:user._id,
@@ -15,8 +16,8 @@ const dayjs = require('dayjs');
     }
 }
 
-function userCollectionResource(users) {
-    return users.map(user => userResource(user));
+async function userCollectionResource(users) {
+    return Promise.all(users.map(user => userResource(user)));
 }
 
 module.exports = { userResource, userCollectionResource };
