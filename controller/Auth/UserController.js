@@ -9,7 +9,7 @@ const user = async (req, res) => {
         const user = await User.findById(req.user.id);
         return jsonResponse(res,{'user' : await userResource(user)});
     }catch (e) {
-        return  errorResponse(res,e.message.e.errors)
+        return errorResponse(res,e.message,e.errors,500);
     }
 
 }
@@ -32,7 +32,7 @@ const changePassword = async (req,res)=>{
         return jsonResponse(res,[],'password-updated successfully');
     }catch (e) {
 
-        return errorResponse(res,e.message,e.error)
+        return errorResponse(res,e.message,e.error,500)
     }
 
 }
